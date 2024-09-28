@@ -6,7 +6,7 @@ const getAllUsers = async (req,res) => {
     try {
         const users = await User.find({})
         res.status(200).json(users)
-        
+
     } catch (error) {
         res.status(500).json({message:error.message})
     }
@@ -48,9 +48,55 @@ const deleteUser = async (req,res) => {
 }
 
 
+// get admin
+const getAdmin = async (req,res) => {
+    const email = req.params.email;
+    const query = {email:email};
+    try {
+        const user = await User.findOne(query);
+        // console.log(user)
+        if(email !== req.decoded.email){
+            res.status(403).json({message:"Forbidden access"})
+        }
+
+        let admin = false;
+        if(user){
+            admin = user?.role === "admin"
+        }
+        res.status(200).json({admin});
+
+    } catch (error) {
+        res.status(500).json({message:error.message});
+    }
+}
+
+
+// make admin
+const makeAdmin =  async (req,res) => {
+    const userId = req.params.id;
+    const {name,email,photoURL,role} = req.body;
+    try {
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {role:"admin"},
+            {new:true, runValidators:true}
+        )
+        if(!updatedUser){
+            res.status(404).json({message:"User is not found!"})
+        }
+        res.status(200).json(updatedUser);
+
+    } catch (error) {
+        res.status(500).json({message:error.message});
+    }
+}
+
+
 
 module.exports ={
   getAllUsers,
   creatUser,
   deleteUser,
+  getAdmin,
+  makeAdmin
 }
