@@ -55,6 +55,7 @@ const updateCart = async (req,res) => {
 // delete a cart
 const deleteCart = async (req,res) => {
     const cartId = req.params.id
+    // console.log(cartId)
     try {
         const deletedCart = await Carts.findOneAndDelete(cartId);
         if(!deletedCart){

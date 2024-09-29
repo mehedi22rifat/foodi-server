@@ -4,13 +4,15 @@ const router = express.Router();
 
 
 const userControllers = require('../controllers/userControllers')
+const verifyToken = require('../middlewares/verifyToken');
+const verifyAdmin = require('../middlewares/verifyAdmin');
 
 
-router.get('/',userControllers.getAllUsers);
-router.post('/',userControllers.creatUser);
-router.delete('/:id',userControllers.deleteUser);
-router.get('/admin/:email',userControllers.getAdmin);
-router.patch('/admin/:id',userControllers.makeAdmin);
+router.get('/',verifyToken,verifyAdmin, userControllers.getAllUsers);
+router.post('/',userControllers.createUser);
+router.delete('/:id',verifyToken,verifyAdmin, userControllers.deleteUser);
+router.get('/admin/:email',verifyToken, userControllers.getAdmin);
+router.patch('/admin/:id',verifyToken,verifyAdmin, userControllers.makeAdmin);
 
 
 
