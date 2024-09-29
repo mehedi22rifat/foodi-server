@@ -36,6 +36,11 @@ mongoose
 
 
 
+  // JWT TOKEN CREATE IN TARMINNAL CODE
+  // 01. node
+  // 02. require('crypto').randombytes(64).tostring('hex')
+  
+
 
  //   import menu routes
  const menuRoutes = require('./api/routes/menuRoutes');
