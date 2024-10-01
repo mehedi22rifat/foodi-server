@@ -45,11 +45,13 @@ mongoose
 
  //   import menu routes
  const menuRoutes = require('./api/routes/menuRoutes');
- const cartRoutes = require('./api/routes/cartRoutes')
- const userRouter = require('./api/routes/userRoutes')
+ const cartRoutes = require('./api/routes/cartRoutes');
+ const userRouter = require('./api/routes/userRoutes');
+ const paymentRouter = require('./api/routes/paymentRoutes');
  app.use('/menu',menuRoutes);
  app.use('/cards',cartRoutes);
  app.use('/users',userRouter);
+ app.use('/payments',paymentRouter)
 
 
 // stripe payment method
@@ -61,17 +63,15 @@ app.post("/create-payment-intent", async (req, res) => {
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amount,
     currency: "usd",
-    payment_method_types: [
-      "card"
-    ],
+    payment_method_types: ["card"],
   });
 
   res.send({
     clientSecret: paymentIntent.client_secret,
-    // [DEV]: For demo purposes only, you should avoid exposing the PaymentIntent ID in the client-side code.
-    // dpmCheckerLink: `https://dashboard.stripe.com/settings/payment_methods/review?transaction_id=${paymentIntent.id}`,
+   
   });
 });
+
 
 
 
