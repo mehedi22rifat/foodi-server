@@ -19,7 +19,7 @@ const addToCart = async (req,res) => {
     const {menuItemId,name,price,recipe,image,category,quantity,email} = req.body;
     try {
         // exsistin menu item
-        const exsistingCartItem = await Carts.findOne({menuItemId});
+        const exsistingCartItem = await Carts.findOne({email, menuItemId });
         if(exsistingCartItem){
             return res.status(400).json({message:"product alresy axsisting card!"})
         }
@@ -52,20 +52,25 @@ const updateCart = async (req,res) => {
     }
 }
 
-// delete a cart
-const deleteCart = async (req,res) => {
-    const cartId = req.params.id
-    // console.log(cartId)
+
+// delete a cart item
+const deleteCart =  async (req, res) => {
+    const cartId = req.params.id;
     try {
-        const deletedCart = await Carts.findOneAndDelete(cartId);
+        const deletedCart = await Carts.findByIdAndDelete(cartId);
         if(!deletedCart){
-            res.status(401).json({message:"Cart item not found!"})
+            return res.status(401).json({message: "Cart Items not found!"})
         }
-        return res.status(200).json({message:"Cart item deleted successfully!"})
+        res.status(200).json({message: "Cart Item Deleted Successfully!"})
+        
     } catch (error) {
         res.status(500).json({message: error.message});
     }
-}
+};
+
+
+
+
 
 
 // get single recipe
